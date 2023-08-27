@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template
 app = Flask(__name__)
 
@@ -22,6 +23,12 @@ def home():
         values.append(row[1])
 
     return render_template("graph.html", labels=labels, values=values)
+
+@app.route('/display_data')
+def display_data():
+    with open('true_data.json') as json_file:
+        my_data = json.load(json_file)
+    return render_template('data_template.html', data=my_data)
 
 if __name__ == '__main__':
     # Run the application on the local development server ##

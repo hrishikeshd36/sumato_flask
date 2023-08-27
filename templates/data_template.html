@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Display</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Scheme Name</th>
+                <th>Division ID</th>
+                <th>Cost</th>
+                <th>FHTC</th>
+                <th>Allotted On</th>
+                <th>Contractor Name</th>
+                <th>Financial Progress</th>
+                <th>UGR</th>
+                <th>ESR</th>
+                <th>FHTC (Progress)</th>
+                <th>TP</th>
+                <th>PH</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in data %}
+            <tr>
+                <td>{{ entry['Scheme_name'] }}</td>
+                <td>{{ entry['Division_ID'] }}</td>
+                <td>{{ entry['Cost'] }}</td>
+                <td>{{ entry['FHTC'] }}</td>
+                <td>{{ entry['Alloted_on'] }}</td>
+                <td>{{ entry['Contractor_Name'] }}</td>
+                <td>{{ entry['Progress']['financial_progress'] }}</td>
+                <td>{{ entry['Progress']['UGR'] }}</td>
+                <td>{{ entry['Progress']['ESR'] }}</td>
+                <td>{{ entry['Progress']['FHTC'] }}</td>
+                <td>{{ entry['Progress']['TP'] }}</td>
+                <td>{{ entry['Progress']['PH'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
