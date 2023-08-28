@@ -1,44 +1,128 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Data Display</title>
-</head>
-<body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
     <table>
-        <thead>
-            <tr>
-                <th>Scheme Name</th>
-                <th>Division ID</th>
-                <th>Cost</th>
-                <th>FHTC</th>
-                <th>Allotted On</th>
-                <th>Contractor Name</th>
-                <th>Financial Progress</th>
-                <th>UGR</th>
-                <th>ESR</th>
-                <th>FHTC (Progress)</th>
-                <th>TP</th>
-                <th>PH</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in data %}
-            <tr>
-                <td>{{ entry['Scheme_name'] }}</td>
-                <td>{{ entry['Division_ID'] }}</td>
-                <td>{{ entry['Cost'] }}</td>
-                <td>{{ entry['FHTC'] }}</td>
-                <td>{{ entry['Alloted_on'] }}</td>
-                <td>{{ entry['Contractor_Name'] }}</td>
-                <td>{{ entry['Progress']['financial_progress'] }}</td>
-                <td>{{ entry['Progress']['UGR'] }}</td>
-                <td>{{ entry['Progress']['ESR'] }}</td>
-                <td>{{ entry['Progress']['FHTC'] }}</td>
-                <td>{{ entry['Progress']['TP'] }}</td>
-                <td>{{ entry['Progress']['PH'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+      <thead>
+        <tr>
+          <th>Scheme Name</th>
+          <th>Division ID</th>
+          <th>Cost</th>
+          <th>FHTC</th>
+          <th>Allotted On</th>
+          <th>Contractor Name</th>
+          <th>Financial Progress</th>
+          <th>UGR</th>
+          <th>ESR</th>
+          <th>FHTC (Progress)</th>
+          <th>TP</th>
+          <th>PH</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in data %}
+        <tr>
+          <td>{{ entry['Scheme_name'] }}</td>
+          <td>{{ entry['Division_ID'] }}</td>
+          <td>{{ entry['Cost'] }}</td>
+          <td>{{ entry['FHTC'] }}</td>
+          <td>{{ entry['Alloted_on'] }}</td>
+          <td>{{ entry['Contractor_Name'] }}</td>
+          <td>
+            <canvas id="financialProgressChart_{{ loop.index }}"></canvas>
+          </td>
+          <td><canvas id="ugrChart_{{ loop.index }}"></canvas></td>
+          <td><canvas id="esrChart_{{ loop.index }}"></canvas></td>
+          <td><canvas id="fhtcProgressChart_{{ loop.index }}"></canvas></td>
+          <td><canvas id="tpChart_{{ loop.index }}"></canvas></td>
+          <td><canvas id="phChart_{{ loop.index }}"></canvas></td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-</body>
+
+    <script>
+      {% for entry in data %}
+      var financialProgressData_{{ loop.index }} = {{ entry['Progress']['financial_progress'] }};
+      var ugrData_{{ loop.index }} = {{ entry['Progress']['UGR'] }};
+      var esrData_{{ loop.index }} = {{ entry['Progress']['ESR'] }};
+      var fhtcProgressData_{{ loop.index }} = {{ entry['Progress']['FHTC'] }};
+      var tpData_{{ loop.index }} = {{ entry['Progress']['TP'] }};
+      var phData_{{ loop.index }} = {{ entry['Progress']['PH'] }};
+
+      var getColor = function(value) {
+          if (value > 70) {
+              return "green";
+          } else if (value >= 40) {
+              return "yellow";
+          } else {
+              return "red";
+          }
+      }
+
+      var financialProgressColor_{{ loop.index }} = getColor(financialProgressData_{{ loop.index }});
+      var ugrColor_{{ loop.index }} = getColor(ugrData_{{ loop.index }});
+      var esrColor_{{ loop.index }} = getColor(esrData_{{ loop.index }});
+      var fhtcProgressColor_{{ loop.index }} = getColor(fhtcProgressData_{{ loop.index }});
+      var tpColor_{{ loop.index }} = getColor(tpData_{{ loop.index }});
+      var phColor_{{ loop.index }} = getColor(phData_{{ loop.index }});
+
+      var financialProgressChart_{{ loop.index }} = new Chart(document.getElementById("financialProgressChart_{{ loop.index }}"), {
+          type: 'bar',
+          data: {
+              labels: [""],
+              datasets: [{
+                  label: 'FP',
+                  data: [financialProgressData_{{ loop.index }}],
+                  backgroundColor: financialProgressColor_{{ loop.index }},
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              indexAxis: "y",
+              elements: {
+                  bar: {
+                      borderWidth: 2,
+                  },
+              },
+              responsive: true,
+              plugins: {
+                  legend: {
+                      display: false,
+                  },
+                  title: {
+                      display: true,
+                  },
+              },
+              scales: {
+                  x: {
+                      min: 0,
+                      max: 100,
+                      beginAtZero: true,
+                      grid: {
+                        drawBorder: false,
+                        display: false
+                      },
+                      ticks: {
+                        display: false
+                      }
+                  },
+                  y: {
+                      beginAtZero: true,
+                      grid: {
+                          display: false
+                      }
+                  }
+              },
+          }
+      });
+
+      // Similar code for other progress types...
+
+      {% endfor %}
+    </script>
+  </body>
 </html>
