@@ -2,7 +2,14 @@
 <html>
   <head>
     <title>Data Display</title>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Font Awesome Stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
 
     <style type="text/css">
       body {
@@ -12,9 +19,134 @@
       canvas {
         height: 90px;
       }
+
+      /* ==================================== */
+      /* =============Side Menu============= */
+      .sidebar {
+        position: fixed;
+        display: inline-block;
+        top: 0;
+        left: -400px;
+        height: 100vh;
+
+        z-index: 999;
+        flex: 1 1 0;
+        width: 100%;
+        max-width: 350px;
+        transition: 0.2s linear;
+        padding: 0;
+        background-color: #fff;
+        overflow: scroll;
+      }
+
+      /* scroll-bar */
+      /* width */
+      .sidebar::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      /* Track */
+      .sidebar::-webkit-scrollbar-track {
+        /* box-shadow: inset 0 0 5px grey; */
+        border-radius: 10px;
+      }
+
+      /* Handle */
+      .sidebar::-webkit-scrollbar-thumb {
+        background: #1a1a1a;
+      }
+      /* scroll-bar */
+
+      .sidebar h3 {
+        color: #fff;
+        font-size: 20px;
+        text-transform: uppercase;
+        padding-left: 25px;
+        margin-top: 8px;
+      }
+
+      .menu-block h5 {
+        /* display: block; */
+        padding: 15px 0 0 32px;
+        color: #1a1a1a;
+        width: 100%;
+        font-size: 18px;
+      }
+      .sidebar .menu .menu-item {
+        display: block;
+        padding: 10px 0 10px 2.8em;
+        color: #1a1a1a;
+        text-decoration: none;
+        transition: 0.2s linear;
+        font-size: 15px;
+        width: 100%;
+        text-transform: capitalize;
+      }
+
+      .sidebar .menu .menu-item:hover,
+      .sidebar .menu .menu-item.is-active {
+        color: #1a1a1a;
+        background-color: #1a1a1a;
+        color: #fff;
+      }
+
+      .menu-toggle {
+        cursor: pointer;
+      }
+
+      .sidebar.is-active {
+        left: 0;
+      }
+
+      .side-head {
+        display: flex;
+        justify-content: space-between;
+        /* width: 100%; */
+        padding: 10px;
+        background-color: #1a1a1a;
+      }
+      .side-head i {
+        color: #fff;
+        font-size: 20px;
+        padding: 8px 12px;
+        border-radius: 50%;
+        border: none;
+        /* background-color: rgba(255, 255, 255,0.2); */
+        cursor: pointer;
+      }
+      /* ------------------------------ */
     </style>
   </head>
   <body>
+    <nav>
+      <div class="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+      <div>
+        <img src="" alt="logo" />
+      </div>
+    </nav>
+
+    <!-- ======================
+    ========Sidebar======= -->
+    <aside class="sidebar">
+      <div class="side-head">
+        <h3>Hello, <span>User</span></h3>
+        <div class="cross-toggle">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
+      </div>
+      <div class="menu">
+        <div class="menu-block">
+          <h5>Trending</h5>
+          <a href="#" class="menu-item">Best Sellers</a>
+          <a href="#" class="menu-item">New Releases</a>
+          <a href="#" class="menu-item">Designer Editions</a>
+          <hr />
+        </div>
+      </div>
+    </aside>
+
     <table>
       <thead>
         <tr>
@@ -55,306 +187,337 @@
     </table>
 
     <script>
-      {% for entry in data %}
-      var financialProgressData_{{ loop.index }} = {{ entry['Progress']['financial_progress'] }};
-      var ugrData_{{ loop.index }} = {{ entry['Progress']['UGR'] }};
-      var esrData_{{ loop.index }} = {{ entry['Progress']['ESR'] }};
-      var fhtcProgressData_{{ loop.index }} = {{ entry['Progress']['FHTC'] }};
-      var tpData_{{ loop.index }} = {{ entry['Progress']['TP'] }};
-      var phData_{{ loop.index }} = {{ entry['Progress']['PH'] }};
+            {% for entry in data %}
+            var financialProgressData_{{ loop.index }} = {{ entry['Progress']['financial_progress'] }};
+            var ugrData_{{ loop.index }} = {{ entry['Progress']['UGR'] }};
+            var esrData_{{ loop.index }} = {{ entry['Progress']['ESR'] }};
+            var fhtcProgressData_{{ loop.index }} = {{ entry['Progress']['FHTC'] }};
+            var tpData_{{ loop.index }} = {{ entry['Progress']['TP'] }};
+            var phData_{{ loop.index }} = {{ entry['Progress']['PH'] }};
 
 
-      // Set color of bar as per progress
-      var getColor = function(value) {
-          if (value > 70) {
-              return "green";
-          } else if (value >= 40) {
-              return "yellow";
-          } else {
-              return "red";
-          }
-      }
+            // Set color of bar as per progress
+            var getColor = function(value) {
+                if (value > 70) {
+                    return "green";
+                } else if (value >= 40) {
+                    return "yellow";
+                } else {
+                    return "red";
+                }
+            }
 
-      var financialProgressColor_{{ loop.index }} = getColor(financialProgressData_{{ loop.index }});
-      var ugrColor_{{ loop.index }} = getColor(ugrData_{{ loop.index }});
-      var esrColor_{{ loop.index }} = getColor(esrData_{{ loop.index }});
-      var fhtcProgressColor_{{ loop.index }} = getColor(fhtcProgressData_{{ loop.index }});
-      var tpColor_{{ loop.index }} = getColor(tpData_{{ loop.index }});
-      var phColor_{{ loop.index }} = getColor(phData_{{ loop.index }});
+            var financialProgressColor_{{ loop.index }} = getColor(financialProgressData_{{ loop.index }});
+            var ugrColor_{{ loop.index }} = getColor(ugrData_{{ loop.index }});
+            var esrColor_{{ loop.index }} = getColor(esrData_{{ loop.index }});
+            var fhtcProgressColor_{{ loop.index }} = getColor(fhtcProgressData_{{ loop.index }});
+            var tpColor_{{ loop.index }} = getColor(tpData_{{ loop.index }});
+            var phColor_{{ loop.index }} = getColor(phData_{{ loop.index }});
 
 
-      // Financial Progress bar
-      var financialProgressChart_{{ loop.index }} = new Chart(document.getElementById("financialProgressChart_{{ loop.index }}"), {
-          type: 'bar',
-          data: {
-              labels: [""],
-              datasets: [{
-                  label: 'FP',
-                  data: [financialProgressData_{{ loop.index }}],
-                  backgroundColor: financialProgressColor_{{ loop.index }},
-                  borderWidth: 1,
-                  barPercentage: 1,
-              }]
-          },
-          options: {
-              indexAxis: "y",
-              elements: {
-                  bar: {
-                      borderWidth: 2,
-                  },
-              },
-              responsive: true,
-              plugins: {
-                  legend: {
-                      display: false,
-                  },
-                  title: {
-                      display: true,
-                  },
-              },
-              scales: {
-                  x: {
-                    display: false,
-                      min: 0,
-                      max: 100,
+            // Financial Progress bar
+            var financialProgressChart_{{ loop.index }} = new Chart(document.getElementById("financialProgressChart_{{ loop.index }}"), {
+                type: 'bar',
+                data: {
+                    labels: [""],
+                    datasets: [{
+                        label: 'FP',
+                        data: [financialProgressData_{{ loop.index }}],
+                        backgroundColor: financialProgressColor_{{ loop.index }},
+                        borderWidth: 1,
+                        barPercentage: 1,
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    elements: {
+                        bar: {
+                            borderWidth: 2,
+                        },
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                        },
+                    },
+                    scales: {
+                        x: {
+                          display: false,
+                            min: 0,
+                            max: 100,
 
-                  },
-                  y: {
-                    display: false,
-                  }
-              },
-          }
+                        },
+                        y: {
+                          display: false,
+                        }
+                    },
+                }
+            });
+
+
+
+            // UGR progress bar
+            var ugrChart_{{ loop.index }} = new Chart(document.getElementById("ugrChart_{{ loop.index }}"), {
+                type: 'bar',
+                data: {
+                    labels: [""],
+                    datasets: [{
+                        label: 'FP',
+                        data: [ugrData_{{ loop.index }}],
+                        backgroundColor: ugrColor_{{ loop.index }},
+                        borderWidth: 1,
+                        barPercentage: 1,
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    elements: {
+                        bar: {
+                            borderWidth: 2,
+                        },
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                        },
+                    },
+                    scales: {
+                        x: {
+                          display: false,
+                            min: 0,
+                            max: 100,
+
+                        },
+                        y: {
+                          display: false,
+                        }
+                    },
+                }
+            });
+
+
+
+            // ESR progress bar
+            var esrChart_{{ loop.index }} = new Chart(document.getElementById("esrChart_{{ loop.index }}"), {
+                type: 'bar',
+                data: {
+                    labels: [""],
+                    datasets: [{
+                        label: 'FP',
+                        data: [esrData_{{ loop.index }}],
+                        backgroundColor: esrColor_{{ loop.index }},
+                        borderWidth: 1,
+                        barPercentage: 1,
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    elements: {
+                        bar: {
+                            borderWidth: 2,
+                        },
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                        },
+                    },
+                    scales: {
+                        x: {
+                          display: false,
+                            min: 0,
+                            max: 100,
+
+                        },
+                        y: {
+                          display: false,
+                        }
+                    },
+                }
+            });
+
+
+
+
+            // FHTCprogress
+            var fhtcProgressChart_{{ loop.index }} = new Chart(document.getElementById("fhtcProgressChart_{{ loop.index }}"), {
+                type: 'bar',
+                data: {
+                    labels: [""],
+                    datasets: [{
+                        label: 'FP',
+                        data: [fhtcProgressData_{{ loop.index }}],
+                        backgroundColor: fhtcProgressColor_{{ loop.index }},
+                        borderWidth: 1,
+                        barPercentage: 1,
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    elements: {
+                        bar: {
+                            borderWidth: 2,
+                        },
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                        },
+                    },
+                    scales: {
+                        x: {
+                          display: false,
+                            min: 0,
+                            max: 100,
+
+                        },
+                        y: {
+                          display: false,
+                        }
+                    },
+                }
+            });
+
+
+
+            // TP progress bar
+            var tpChart_{{ loop.index }} = new Chart(document.getElementById("tpChart_{{ loop.index }}"), {
+                type: 'bar',
+                data: {
+                    labels: [""],
+                    datasets: [{
+                        label: 'FP',
+                        data: [tpData_{{ loop.index }}],
+                        backgroundColor: tpColor_{{ loop.index }},
+                        borderWidth: 1,
+                        barPercentage: 1,
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    elements: {
+                        bar: {
+                            borderWidth: 2,
+                        },
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                        },
+                    },
+                    scales: {
+                        x: {
+                          display: false,
+                            min: 0,
+                            max: 100,
+
+                        },
+                        y: {
+                          display: false,
+                        }
+                    },
+                }
+            });
+
+
+
+            // PH progress bar
+            var phChart_{{ loop.index }} = new Chart(document.getElementById("phChart_{{ loop.index }}"), {
+                type: 'bar',
+                data: {
+                    labels: [""],
+                    datasets: [{
+                        label: 'FP',
+                        data: [phData_{{ loop.index }}],
+                        backgroundColor: phColor_{{ loop.index }},
+                        borderWidth: 1,
+                        barPercentage: 1,
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    elements: {
+                        bar: {
+                            borderWidth: 2,
+                        },
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                        },
+                    },
+                    scales: {
+                        x: {
+                          display: false,
+                            min: 0,
+                            max: 100,
+
+                        },
+                        y: {
+                          display: false,
+                        }
+                    },
+                }
+            });
+
+            // Similar code for other progress types...
+
+            {% endfor %}
+
+
+
+            // side bar toggle
+      const menu_toggle = document.querySelector(".menu-toggle");
+      const menu_toggle2 = document.querySelector(".menu-toggle-2");
+      const sidebar = document.querySelector(".sidebar");
+      const cross_toggle = document.querySelector(".cross-toggle");
+      const mob_ham = document.querySelector(".mob-ham");
+      const mob_ham_scroll = document.querySelector(".mob-ham-scroll");
+
+      menu_toggle.addEventListener("click", () => {
+        menu_toggle.classList.toggle("is-active");
+        sidebar.classList.toggle("is-active");
       });
-
-
-
-      // UGR progress bar
-      var ugrChart_{{ loop.index }} = new Chart(document.getElementById("ugrChart_{{ loop.index }}"), {
-          type: 'bar',
-          data: {
-              labels: [""],
-              datasets: [{
-                  label: 'FP',
-                  data: [ugrData_{{ loop.index }}],
-                  backgroundColor: ugrColor_{{ loop.index }},
-                  borderWidth: 1,
-                  barPercentage: 1,
-              }]
-          },
-          options: {
-              indexAxis: "y",
-              elements: {
-                  bar: {
-                      borderWidth: 2,
-                  },
-              },
-              responsive: true,
-              plugins: {
-                  legend: {
-                      display: false,
-                  },
-                  title: {
-                      display: true,
-                  },
-              },
-              scales: {
-                  x: {
-                    display: false,
-                      min: 0,
-                      max: 100,
-
-                  },
-                  y: {
-                    display: false,
-                  }
-              },
-          }
+      cross_toggle.addEventListener("click", () => {
+        cross_toggle.classList.toggle("is-active");
+        sidebar.classList.toggle("is-active");
       });
-
-
-
-      // ESR progress bar
-      var esrChart_{{ loop.index }} = new Chart(document.getElementById("esrChart_{{ loop.index }}"), {
-          type: 'bar',
-          data: {
-              labels: [""],
-              datasets: [{
-                  label: 'FP',
-                  data: [esrData_{{ loop.index }}],
-                  backgroundColor: esrColor_{{ loop.index }},
-                  borderWidth: 1,
-                  barPercentage: 1,
-              }]
-          },
-          options: {
-              indexAxis: "y",
-              elements: {
-                  bar: {
-                      borderWidth: 2,
-                  },
-              },
-              responsive: true,
-              plugins: {
-                  legend: {
-                      display: false,
-                  },
-                  title: {
-                      display: true,
-                  },
-              },
-              scales: {
-                  x: {
-                    display: false,
-                      min: 0,
-                      max: 100,
-
-                  },
-                  y: {
-                    display: false,
-                  }
-              },
-          }
+      menu_toggle2.addEventListener("click", () => {
+        menu_toggle2.classList.toggle("is-active");
+        sidebar.classList.toggle("is-active");
       });
-
-
-
-
-      // FHTCprogress
-      var fhtcProgressChart_{{ loop.index }} = new Chart(document.getElementById("fhtcProgressChart_{{ loop.index }}"), {
-          type: 'bar',
-          data: {
-              labels: [""],
-              datasets: [{
-                  label: 'FP',
-                  data: [fhtcProgressData_{{ loop.index }}],
-                  backgroundColor: fhtcProgressColor_{{ loop.index }},
-                  borderWidth: 1,
-                  barPercentage: 1,
-              }]
-          },
-          options: {
-              indexAxis: "y",
-              elements: {
-                  bar: {
-                      borderWidth: 2,
-                  },
-              },
-              responsive: true,
-              plugins: {
-                  legend: {
-                      display: false,
-                  },
-                  title: {
-                      display: true,
-                  },
-              },
-              scales: {
-                  x: {
-                    display: false,
-                      min: 0,
-                      max: 100,
-
-                  },
-                  y: {
-                    display: false,
-                  }
-              },
-          }
+      mob_ham.addEventListener("click", () => {
+        mob_ham.classList.toggle("is-active");
+        sidebar.classList.toggle("is-active");
       });
-
-
-
-      // TP progress bar
-      var tpChart_{{ loop.index }} = new Chart(document.getElementById("tpChart_{{ loop.index }}"), {
-          type: 'bar',
-          data: {
-              labels: [""],
-              datasets: [{
-                  label: 'FP',
-                  data: [tpData_{{ loop.index }}],
-                  backgroundColor: tpColor_{{ loop.index }},
-                  borderWidth: 1,
-                  barPercentage: 1,
-              }]
-          },
-          options: {
-              indexAxis: "y",
-              elements: {
-                  bar: {
-                      borderWidth: 2,
-                  },
-              },
-              responsive: true,
-              plugins: {
-                  legend: {
-                      display: false,
-                  },
-                  title: {
-                      display: true,
-                  },
-              },
-              scales: {
-                  x: {
-                    display: false,
-                      min: 0,
-                      max: 100,
-
-                  },
-                  y: {
-                    display: false,
-                  }
-              },
-          }
+      mob_ham_scroll.addEventListener("click", () => {
+        mob_ham_scroll.classList.toggle("is-active");
+        sidebar.classList.toggle("is-active");
       });
-
-
-
-      // PH progress bar
-      var phChart_{{ loop.index }} = new Chart(document.getElementById("phChart_{{ loop.index }}"), {
-          type: 'bar',
-          data: {
-              labels: [""],
-              datasets: [{
-                  label: 'FP',
-                  data: [phData_{{ loop.index }}],
-                  backgroundColor: phColor_{{ loop.index }},
-                  borderWidth: 1,
-                  barPercentage: 1,
-              }]
-          },
-          options: {
-              indexAxis: "y",
-              elements: {
-                  bar: {
-                      borderWidth: 2,
-                  },
-              },
-              responsive: true,
-              plugins: {
-                  legend: {
-                      display: false,
-                  },
-                  title: {
-                      display: true,
-                  },
-              },
-              scales: {
-                  x: {
-                    display: false,
-                      min: 0,
-                      max: 100,
-
-                  },
-                  y: {
-                    display: false,
-                  }
-              },
-          }
-      });
-
-      // Similar code for other progress types...
-
-      {% endfor %}
     </script>
   </body>
 </html>
